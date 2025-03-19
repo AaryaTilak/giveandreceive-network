@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Gift, Heart, Package, Calendar, MapPin, User } from 'lucide-react';
@@ -6,6 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import DonationCard, { DonationItem } from '@/components/DonationCard';
 import RequestCard, { RequestItem } from '@/components/RequestCard';
+import AnimatedElement from '@/components/AnimatedElement';
 
 // Sample data
 const featuredDonations: DonationItem[] = [
@@ -80,40 +80,50 @@ export default function Index() {
         
         <div className="container mx-auto">
           <div className="max-w-3xl mx-auto text-center">
-            <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 animate-fade-in">
-              Connecting Generosity with Need
-            </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 animate-fade-in animation-delay-100">
-              Give What You Can,<br />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
-                Receive What You Need
+            <AnimatedElement animation="fade-up" delay={100}>
+              <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
+                Connecting Generosity with Need
               </span>
-            </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-8 animate-fade-in animation-delay-200">
-              A platform that bridges the gap between those with resources to share
-              and those in need of assistance, creating a community of support and kindness.
-            </p>
+            </AnimatedElement>
             
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in animation-delay-300">
-              <Link 
-                to="/donations" 
-                className="px-6 py-3 rounded-full bg-primary text-white font-medium hover:bg-primary/90 transition-all shadow-sm hover:shadow w-full sm:w-auto"
-              >
-                <span className="flex items-center justify-center">
-                  <Gift size={20} className="mr-2" />
-                  I Want to Donate
+            <AnimatedElement animation="fade-up" delay={300}>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+                Give What You Can,<br />
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
+                  Receive What You Need
                 </span>
-              </Link>
-              <Link 
-                to="/requests" 
-                className="px-6 py-3 rounded-full bg-white text-foreground font-medium hover:bg-gray-50 transition-all shadow-sm hover:shadow border border-border w-full sm:w-auto"
-              >
-                <span className="flex items-center justify-center">
-                  <Heart size={20} className="mr-2" />
-                  I Need Assistance
-                </span>
-              </Link>
-            </div>
+              </h1>
+            </AnimatedElement>
+            
+            <AnimatedElement animation="fade-up" delay={500}>
+              <p className="text-lg md:text-xl text-muted-foreground mb-8">
+                A platform that bridges the gap between those with resources to share
+                and those in need of assistance, creating a community of support and kindness.
+              </p>
+            </AnimatedElement>
+            
+            <AnimatedElement animation="bounce-in" delay={700}>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <Link 
+                  to="/donations" 
+                  className="px-6 py-3 rounded-full bg-primary text-white font-medium hover:bg-primary/90 transition-all shadow-sm hover:shadow w-full sm:w-auto hover-shine overflow-hidden"
+                >
+                  <span className="flex items-center justify-center">
+                    <Gift size={20} className="mr-2" />
+                    I Want to Donate
+                  </span>
+                </Link>
+                <Link 
+                  to="/requests" 
+                  className="px-6 py-3 rounded-full bg-white text-foreground font-medium hover:bg-gray-50 transition-all shadow-sm hover:shadow border border-border w-full sm:w-auto hover-lift"
+                >
+                  <span className="flex items-center justify-center">
+                    <Heart size={20} className="mr-2" />
+                    I Need Assistance
+                  </span>
+                </Link>
+              </div>
+            </AnimatedElement>
           </div>
         </div>
       </section>
@@ -121,46 +131,54 @@ export default function Index() {
       {/* How It Works Section */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">How It Works</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Our platform simplifies the process of giving and receiving help, making it easy for people to connect and support each other.
-            </p>
-          </div>
+          <AnimatedElement animation="fade-up">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">How It Works</h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                Our platform simplifies the process of giving and receiving help, making it easy for people to connect and support each other.
+              </p>
+            </div>
+          </AnimatedElement>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Step 1 */}
-            <div className="p-6 rounded-xl border border-border/50 text-center hover:border-primary/20 hover:bg-primary/5 transition-all duration-300">
-              <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
-                <Gift size={30} className="text-primary" />
+            <AnimatedElement animation="fade-up" delay={200}>
+              <div className="p-6 rounded-xl border border-border/50 text-center hover:border-primary/20 hover:bg-primary/5 transition-all duration-300 hover-lift">
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6 pulse-soft">
+                  <Gift size={30} className="text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-3">List Your Donation</h3>
+                <p className="text-muted-foreground">
+                  Create a listing for items or services you'd like to donate, including details and photos.
+                </p>
               </div>
-              <h3 className="text-xl font-semibold mb-3">List Your Donation</h3>
-              <p className="text-muted-foreground">
-                Create a listing for items or services you'd like to donate, including details and photos.
-              </p>
-            </div>
+            </AnimatedElement>
             
             {/* Step 2 */}
-            <div className="p-6 rounded-xl border border-border/50 text-center hover:border-primary/20 hover:bg-primary/5 transition-all duration-300">
-              <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
-                <Heart size={30} className="text-primary" />
+            <AnimatedElement animation="fade-up" delay={400}>
+              <div className="p-6 rounded-xl border border-border/50 text-center hover:border-primary/20 hover:bg-primary/5 transition-all duration-300 hover-lift">
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6 pulse-soft">
+                  <Heart size={30} className="text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-3">Request Assistance</h3>
+                <p className="text-muted-foreground">
+                  Post your needs, whether it's clothing, food, or other forms of support, and get connected with donors.
+                </p>
               </div>
-              <h3 className="text-xl font-semibold mb-3">Request Assistance</h3>
-              <p className="text-muted-foreground">
-                Post your needs, whether it's clothing, food, or other forms of support, and get connected with donors.
-              </p>
-            </div>
+            </AnimatedElement>
             
             {/* Step 3 */}
-            <div className="p-6 rounded-xl border border-border/50 text-center hover:border-primary/20 hover:bg-primary/5 transition-all duration-300">
-              <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
-                <Package size={30} className="text-primary" />
+            <AnimatedElement animation="fade-up" delay={600}>
+              <div className="p-6 rounded-xl border border-border/50 text-center hover:border-primary/20 hover:bg-primary/5 transition-all duration-300 hover-lift">
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6 pulse-soft">
+                  <Package size={30} className="text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-3">Connect & Share</h3>
+                <p className="text-muted-foreground">
+                  Connect with others in your community, arrange pick-ups or drop-offs, and share resources.
+                </p>
               </div>
-              <h3 className="text-xl font-semibold mb-3">Connect & Share</h3>
-              <p className="text-muted-foreground">
-                Connect with others in your community, arrange pick-ups or drop-offs, and share resources.
-              </p>
-            </div>
+            </AnimatedElement>
           </div>
         </div>
       </section>

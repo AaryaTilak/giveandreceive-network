@@ -19,15 +19,15 @@ interface DonationCardProps {
 
 export default function DonationCard({ donation }: DonationCardProps) {
   return (
-    <div className="card-hover rounded-xl overflow-hidden bg-white animate-scale-in">
-      <div className="relative h-48 overflow-hidden">
+    <div className="card-hover rounded-xl overflow-hidden bg-white animate-scale-in hover-lift">
+      <div className="relative h-48 overflow-hidden hover-shine">
         <img
           src={donation.imageUrl}
           alt={donation.title}
           className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
         />
         <div className="absolute top-3 left-3">
-          <Badge className="bg-accent text-white hover:bg-accent/90">{donation.category}</Badge>
+          <Badge className="bg-accent text-white hover:bg-accent/90 pulse-soft">{donation.category}</Badge>
         </div>
       </div>
       <div className="p-5">
@@ -50,7 +50,7 @@ export default function DonationCard({ donation }: DonationCardProps) {
         </div>
         
         <div className="mt-6">
-          <button className="w-full btn-primary py-2 px-4">
+          <button className="w-full btn-primary py-2 px-4 hover-shine overflow-hidden">
             Request This Item
           </button>
         </div>
