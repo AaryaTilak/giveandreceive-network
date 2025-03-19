@@ -27,7 +27,7 @@ export default function DonationCard({ donation }: DonationCardProps) {
           className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
         />
         <div className="absolute top-3 left-3">
-          <Badge className="bg-accent text-white hover:bg-accent/90">{donation.category}</Badge>
+          <Badge className="bg-primary text-white hover:bg-primary/90">{donation.category}</Badge>
         </div>
       </div>
       <div className="p-5">
