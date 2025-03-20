@@ -1,17 +1,8 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin, User } from "lucide-react";
-
-export interface DonationItem {
-  id: string;
-  title: string;
-  category: string;
-  description: string;
-  location: string;
-  donorName: string;
-  imageUrl: string;
-  postedDate: string;
-}
+import { Link } from "react-router-dom";
+import { DonationItem } from "@/hooks/useDonations";
 
 interface DonationCardProps {
   donation: DonationItem;
@@ -50,9 +41,9 @@ export default function DonationCard({ donation }: DonationCardProps) {
         </div>
         
         <div className="mt-6">
-          <button className="w-full btn-primary py-2 px-4 hover-shine overflow-hidden">
+          <Link to={`/request/${donation.id}`} className="w-full btn-primary py-2 px-4 hover-shine overflow-hidden block text-center">
             Request This Item
-          </button>
+          </Link>
         </div>
       </div>
     </div>

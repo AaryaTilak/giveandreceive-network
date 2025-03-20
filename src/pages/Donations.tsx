@@ -5,70 +5,7 @@ import Footer from '@/components/Footer';
 import DonationCard, { DonationItem } from '@/components/DonationCard';
 import { Search, Filter, Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
-// Sample data
-const allDonations: DonationItem[] = [
-  {
-    id: '1',
-    title: 'Winter Clothing Package',
-    category: 'Clothing',
-    description: 'Gently used winter clothes including jackets, sweaters, and boots. Suitable for adults.',
-    location: 'Brooklyn, NY',
-    donorName: 'Sarah Johnson',
-    imageUrl: 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-    postedDate: '2 days ago'
-  },
-  {
-    id: '2',
-    title: 'Non-perishable Food Items',
-    category: 'Food',
-    description: 'Assorted canned goods, pasta, rice, and other non-perishable items. All within expiry date.',
-    location: 'Seattle, WA',
-    donorName: 'Michael Chen',
-    imageUrl: 'https://images.unsplash.com/photo-1593113646773-028c64a8f1b8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-    postedDate: '3 days ago'
-  },
-  {
-    id: '3',
-    title: 'Kids Toys and Books',
-    category: 'Children',
-    description: 'Collection of toys and books for children ages 3-8. All items are in excellent condition.',
-    location: 'Chicago, IL',
-    donorName: 'Emily Rodriguez',
-    imageUrl: 'https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2075&q=80',
-    postedDate: '1 week ago'
-  },
-  {
-    id: '4',
-    title: 'Office Desk and Chair',
-    category: 'Furniture',
-    description: 'Lightly used office desk and ergonomic chair. Perfect for a home office setup.',
-    location: 'Austin, TX',
-    donorName: 'David Wilson',
-    imageUrl: 'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2036&q=80',
-    postedDate: '5 days ago'
-  },
-  {
-    id: '5',
-    title: 'Professional Resume Service',
-    category: 'Services',
-    description: 'Offering free resume review and editing services to help with job applications.',
-    location: 'Remote',
-    donorName: 'Jennifer Adams',
-    imageUrl: 'https://images.unsplash.com/photo-1586282391129-76a6df230234?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-    postedDate: '1 week ago'
-  },
-  {
-    id: '6',
-    title: 'Kitchen Appliances',
-    category: 'Household',
-    description: 'Various kitchen appliances including toaster, blender, and microwave. All in working condition.',
-    location: 'Denver, CO',
-    donorName: 'Thomas Lee',
-    imageUrl: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-    postedDate: '2 weeks ago'
-  }
-];
+import { useDonations } from '@/hooks/useDonations';
 
 // Categories for filtering
 const categories = [
@@ -87,8 +24,9 @@ const categories = [
 export default function Donations() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const { donations } = useDonations();
   
-  const filteredDonations = allDonations.filter(donation => {
+  const filteredDonations = donations.filter(donation => {
     const matchesSearch = donation.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           donation.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === 'All' || donation.category === selectedCategory;
@@ -110,10 +48,10 @@ export default function Donations() {
               Find what you need or request something specific.
             </p>
             
-            <button className="px-6 py-3 rounded-full bg-primary text-white font-medium hover:bg-primary/90 transition-all flex items-center mx-auto">
+            <Link to="/donate" className="px-6 py-3 rounded-full bg-primary text-white font-medium hover:bg-primary/90 transition-all flex items-center mx-auto inline-flex">
               <Plus size={20} className="mr-2" />
               Offer a Donation
-            </button>
+            </Link>
           </div>
         </section>
         
@@ -173,7 +111,7 @@ export default function Donations() {
                 <h3 className="text-xl font-semibold mb-2">No donations found</h3>
                 <p className="text-muted-foreground mb-6">Try adjusting your search or filters</p>
                 <Link 
-                  to="#" 
+                  to="/donate" 
                   className="px-6 py-3 rounded-full bg-primary text-white font-medium hover:bg-primary/90 transition-all inline-flex items-center"
                 >
                   <Plus size={18} className="mr-2" />

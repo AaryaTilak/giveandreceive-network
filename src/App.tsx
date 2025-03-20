@@ -10,6 +10,8 @@ import Requests from "./pages/Requests";
 import NotFound from "./pages/NotFound";
 import Admin from "./pages/Admin";
 import AdminLayout from "./pages/AdminLayout";
+import DonationForm from "./pages/DonationForm";
+import DonationSuccess from "./pages/DonationSuccess";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +25,8 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/donations" element={<Donations />} />
           <Route path="/requests" element={<Requests />} />
+          <Route path="/donate" element={<DonationForm />} />
+          <Route path="/donation-success" element={<DonationSuccess />} />
           
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>
