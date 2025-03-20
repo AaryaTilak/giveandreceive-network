@@ -1,80 +1,16 @@
-
 import { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import RequestCard, { RequestItem } from '@/components/RequestCard';
+import RequestCard from '@/components/RequestCard';
 import { Search, Filter, Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
-// Sample data
-const allRequests: RequestItem[] = [
-  {
-    id: '1',
-    title: 'Need School Supplies for Children',
-    category: 'Education',
-    description: 'Looking for notebooks, pens, backpacks and other school supplies for three children starting school next month.',
-    location: 'Portland, OR',
-    requesterName: 'Lisa Patel',
-    urgency: 'medium',
-    postedDate: '4 days ago'
-  },
-  {
-    id: '2',
-    title: 'Wheelchair Assistance',
-    category: 'Medical',
-    description: 'In need of a wheelchair for elderly parent who recently had surgery. Temporary or permanent donation appreciated.',
-    location: 'Austin, TX',
-    requesterName: 'Robert Kim',
-    urgency: 'high',
-    postedDate: '1 day ago'
-  },
-  {
-    id: '3',
-    title: 'Winter Coat for Teenager',
-    category: 'Clothing',
-    description: 'Looking for a warm winter coat for a 16-year-old boy. Size L/XL preferred.',
-    location: 'Chicago, IL',
-    requesterName: 'Maria Gonzalez',
-    urgency: 'medium',
-    postedDate: '3 days ago'
-  },
-  {
-    id: '4',
-    title: 'Basic Groceries Needed',
-    category: 'Food',
-    description: 'Family of four in need of basic groceries for the week. Any help with non-perishable items would be greatly appreciated.',
-    location: 'Atlanta, GA',
-    requesterName: 'James Wilson',
-    urgency: 'high',
-    postedDate: '1 day ago'
-  },
-  {
-    id: '5',
-    title: 'Furniture for New Apartment',
-    category: 'Furniture',
-    description: 'Recently moved into a new apartment and in need of basic furniture - a table, chairs, and a bed frame if possible.',
-    location: 'San Francisco, CA',
-    requesterName: 'Alex Johnson',
-    urgency: 'low',
-    postedDate: '1 week ago'
-  },
-  {
-    id: '6',
-    title: 'Math Tutoring for 8th Grader',
-    category: 'Services',
-    description: 'Looking for someone who can provide math tutoring for my 8th-grade daughter who is struggling with algebra.',
-    location: 'Remote',
-    requesterName: 'Patricia Lee',
-    urgency: 'medium',
-    postedDate: '5 days ago'
-  }
-];
+import { useRequests } from '@/hooks/useRequests';
 
 // Categories for filtering
 const categories = [
   "All",
   "Clothing",
-  "Food",
+  "Food", 
   "Children",
   "Furniture",
   "Services",
@@ -96,8 +32,9 @@ export default function Requests() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedUrgency, setSelectedUrgency] = useState('All');
+  const { requests } = useRequests();
   
-  const filteredRequests = allRequests.filter(request => {
+  const filteredRequests = requests.filter(request => {
     const matchesSearch = request.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           request.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === 'All' || request.category === selectedCategory;
@@ -120,10 +57,10 @@ export default function Requests() {
               Find someone you can help today.
             </p>
             
-            <button className="px-6 py-3 rounded-full bg-primary text-white font-medium hover:bg-primary/90 transition-all flex items-center mx-auto">
+            <Link to="/request" className="px-6 py-3 rounded-full bg-primary text-white font-medium hover:bg-primary/90 transition-all flex items-center mx-auto inline-flex">
               <Plus size={20} className="mr-2" />
               Create a Request
-            </button>
+            </Link>
           </div>
         </section>
         
@@ -207,7 +144,7 @@ export default function Requests() {
                 <h3 className="text-xl font-semibold mb-2">No requests found</h3>
                 <p className="text-muted-foreground mb-6">Try adjusting your search or filters</p>
                 <Link 
-                  to="#" 
+                  to="/request" 
                   className="px-6 py-3 rounded-full bg-primary text-white font-medium hover:bg-primary/90 transition-all inline-flex items-center"
                 >
                   <Plus size={18} className="mr-2" />
