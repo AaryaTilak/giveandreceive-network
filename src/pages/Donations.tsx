@@ -1,17 +1,16 @@
-
 import { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import DonationCard, { DonationItem } from '@/components/DonationCard';
+import DonationCard from '@/components/DonationCard';
 import { Search, Filter, Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useDonations } from '@/hooks/useDonations';
+import { useDonations, DonationItem } from '@/hooks/useDonations';
 
 // Categories for filtering
 const categories = [
   "All",
   "Clothing",
-  "Food",
+  "Food", 
   "Children",
   "Furniture",
   "Services",

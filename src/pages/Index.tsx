@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Gift, Heart, Package, Calendar, MapPin, User } from 'lucide-react';
+import { Gift, Heart, Package } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import DonationCard, { DonationItem } from '@/components/DonationCard';
-import RequestCard, { RequestItem } from '@/components/RequestCard';
+import DonationCard from '@/components/DonationCard';
+import RequestCard from '@/components/RequestCard';
 import AnimatedElement from '@/components/AnimatedElement';
+import { DonationItem } from '@/hooks/useDonations';
+import { RequestItem } from '@/components/RequestCard';
 
 // Sample data
 const featuredDonations: DonationItem[] = [
