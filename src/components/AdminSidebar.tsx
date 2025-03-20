@@ -26,10 +26,10 @@ export default function AdminSidebar({ className }: AdminSidebarProps) {
   ];
 
   return (
-    <div className={cn("flex flex-col h-screen bg-white border-r", className)}>
+    <div className={cn("flex flex-col h-screen bg-[#284b63] border-r border-[#d9d9d9]/30 text-white", className)}>
       <div className="p-4">
         <div className="flex items-center">
-          <UserCircle className="w-8 h-8 text-primary mr-2" />
+          <UserCircle className="w-8 h-8 text-[#d9d9d9] mr-2" />
           <h2 className="text-xl font-semibold">Admin Panel</h2>
         </div>
       </div>
@@ -47,7 +47,7 @@ export default function AdminSidebar({ className }: AdminSidebarProps) {
           ))}
         </nav>
         
-        <Separator className="my-4 mx-2" />
+        <Separator className="my-4 mx-2 bg-[#d9d9d9]/30" />
         
         <nav className="px-2 space-y-1">
           {otherNavItems.map((item) => (
@@ -62,14 +62,14 @@ export default function AdminSidebar({ className }: AdminSidebarProps) {
         </nav>
       </div>
       
-      <div className="p-4 border-t">
+      <div className="p-4 border-t border-[#d9d9d9]/30">
         <div className="flex items-center">
-          <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+          <div className="w-8 h-8 rounded-full bg-[#3c6e71] flex items-center justify-center text-white">
             <span className="font-semibold">AH</span>
           </div>
           <div className="ml-2">
             <p className="text-sm font-medium">Admin User</p>
-            <p className="text-xs text-muted-foreground">admin@example.com</p>
+            <p className="text-xs text-[#d9d9d9]">admin@example.com</p>
           </div>
         </div>
       </div>
@@ -91,8 +91,8 @@ const NavLink = ({ href, label, icon: Icon, isActive }: NavLinkProps) => {
       className={cn(
         "flex items-center px-3 py-2 text-sm font-medium rounded-md",
         isActive
-          ? "bg-primary/10 text-primary"
-          : "text-gray-700 hover:bg-gray-100"
+          ? "bg-[#3c6e71] text-white"
+          : "text-[#d9d9d9] hover:bg-[#3c6e71]/50"
       )}
     >
       <Icon className="mr-3 h-5 w-5" />
