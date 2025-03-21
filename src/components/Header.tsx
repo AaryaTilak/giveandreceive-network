@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, User } from 'lucide-react';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -72,6 +72,7 @@ function NavLinks() {
     { to: '/', label: 'Home' },
     { to: '/donations', label: 'Donate' },
     { to: '/requests', label: 'Request Help' },
+    { to: '/profile', label: 'My Profile', icon: User },
   ];
   
   return (
@@ -80,12 +81,13 @@ function NavLinks() {
         <Link
           key={link.to}
           to={link.to}
-          className={`py-2 px-1 text-base font-medium transition-all relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:after:w-full ${
+          className={`py-2 px-1 text-base font-medium transition-all relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:after:w-full flex items-center ${
             location.pathname === link.to 
               ? 'text-primary after:w-full' 
               : 'text-foreground/80 hover:text-foreground'
           }`}
         >
+          {link.icon && <link.icon className="h-4 w-4 mr-1" />}
           {link.label}
         </Link>
       ))}

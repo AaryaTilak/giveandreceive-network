@@ -80,6 +80,8 @@ const initialDonations: DonationItem[] = [
 interface DonationsContextType {
   donations: DonationItem[];
   addDonation: (donation: Omit<DonationItem, 'id' | 'postedDate'>) => void;
+  editDonation: (donation: DonationItem) => void;
+  deleteDonation: (id: string) => void;
   loading: boolean;
 }
 
@@ -118,8 +120,37 @@ export function DonationsProvider({ children }: { children: React.ReactNode }) {
     }, 1000);
   };
 
+  const editDonation = (updatedDonation: DonationItem) => {
+    setLoading(true);
+    
+    // Simulate API call
+    setTimeout(() => {
+      setDonations(prev => 
+        prev.map(donation => 
+          donation.id === updatedDonation.id ? updatedDonation : donation
+        )
+      );
+      setLoading(false);
+      
+      toast({
+        title: "Donation updated successfully",
+        description: "Your donation has been updated",
+      });
+    }, 1000);
+  };
+
+  const deleteDonation = (id: string) => {
+    setLoading(true);
+    
+    // Simulate API call
+    setTimeout(() => {
+      setDonations(prev => prev.filter(donation => donation.id !== id));
+      setLoading(false);
+    }, 500);
+  };
+
   return (
-    <DonationsContext.Provider value={{ donations, addDonation, loading }}>
+    <DonationsContext.Provider value={{ donations, addDonation, editDonation, deleteDonation, loading }}>
       {children}
     </DonationsContext.Provider>
   );
@@ -131,6 +162,8 @@ export function useDonations() {
     return {
       donations: initialDonations,
       addDonation: () => console.warn('DonationsProvider not found'),
+      editDonation: () => console.warn('DonationsProvider not found'),
+      deleteDonation: () => console.warn('DonationsProvider not found'),
       loading: false
     };
   }

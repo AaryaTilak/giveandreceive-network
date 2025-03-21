@@ -1,7 +1,17 @@
 
 import { useState, useEffect, createContext, useContext } from 'react';
 import { useToast } from '@/components/ui/use-toast';
-import { RequestItem } from '@/components/RequestCard';
+
+export interface RequestItem {
+  id: string;
+  title: string;
+  category: string;
+  description: string;
+  location: string;
+  requesterName: string;
+  urgency: 'low' | 'medium' | 'high';
+  postedDate: string;
+}
 
 // Sample initial data
 const initialRequests: RequestItem[] = [
@@ -70,6 +80,8 @@ const initialRequests: RequestItem[] = [
 interface RequestsContextType {
   requests: RequestItem[];
   addRequest: (request: Omit<RequestItem, 'id' | 'postedDate'>) => void;
+  editRequest: (request: RequestItem) => void;
+  deleteRequest: (id: string) => void;
   loading: boolean;
 }
 
@@ -108,8 +120,37 @@ export function RequestsProvider({ children }: { children: React.ReactNode }) {
     }, 1000);
   };
 
+  const editRequest = (updatedRequest: RequestItem) => {
+    setLoading(true);
+    
+    // Simulate API call
+    setTimeout(() => {
+      setRequests(prev => 
+        prev.map(request => 
+          request.id === updatedRequest.id ? updatedRequest : request
+        )
+      );
+      setLoading(false);
+      
+      toast({
+        title: "Request updated successfully",
+        description: "Your help request has been updated",
+      });
+    }, 1000);
+  };
+
+  const deleteRequest = (id: string) => {
+    setLoading(true);
+    
+    // Simulate API call
+    setTimeout(() => {
+      setRequests(prev => prev.filter(request => request.id !== id));
+      setLoading(false);
+    }, 500);
+  };
+
   return (
-    <RequestsContext.Provider value={{ requests, addRequest, loading }}>
+    <RequestsContext.Provider value={{ requests, addRequest, editRequest, deleteRequest, loading }}>
       {children}
     </RequestsContext.Provider>
   );
@@ -121,6 +162,8 @@ export function useRequests() {
     return {
       requests: initialRequests,
       addRequest: (request: Omit<RequestItem, 'id' | 'postedDate'>) => console.warn('RequestsProvider not found'),
+      editRequest: () => console.warn('RequestsProvider not found'),
+      deleteRequest: () => console.warn('RequestsProvider not found'),
       loading: false
     };
   }
