@@ -4,6 +4,13 @@ import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, User, LogOut } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 
+// Define a type for the links including the optional icon property
+type NavLink = {
+  to: string;
+  label: string;
+  icon?: React.ComponentType<{ className?: string }>;
+};
+
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -118,7 +125,7 @@ function NavLinks({ isAuthenticated, isAdmin }: { isAuthenticated: boolean, isAd
   const location = useLocation();
   
   // Basic links for everyone
-  const links = [
+  const links: NavLink[] = [
     { to: '/', label: 'Home' },
     { to: '/donations', label: 'Donate' },
     { to: '/requests', label: 'Request Help' },
