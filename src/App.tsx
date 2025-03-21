@@ -12,6 +12,8 @@ import Requests from "./pages/Requests";
 import NotFound from "./pages/NotFound";
 import Admin from "./pages/Admin";
 import AdminLayout from "./pages/AdminLayout";
+import AdminDonations from "./pages/AdminDonations";
+import AdminRequests from "./pages/AdminRequests";
 import DonationForm from "./pages/DonationForm";
 import DonationSuccess from "./pages/DonationSuccess";
 import RequestForm from "./pages/RequestForm";
@@ -48,8 +50,8 @@ const App = () => (
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<Admin />} />
-              <Route path="donations" element={<Admin />} /> {/* Placeholder - would be unique component in real app */}
-              <Route path="users" element={<Admin />} /> {/* Placeholder - would be unique component in real app */}
+              <Route path="donations" element={<AdminDonations />} />
+              <Route path="requests" element={<AdminRequests />} />
               <Route path="settings" element={<Admin />} /> {/* Placeholder - would be unique component in real app */}
               <Route path="help" element={<Admin />} /> {/* Placeholder - would be unique component in real app */}
             </Route>
