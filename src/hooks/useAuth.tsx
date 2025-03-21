@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 
 // Define user types
@@ -44,14 +44,21 @@ const MOCK_USERS = [
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
+  const location = useLocation();
   
   // Check for saved user on initial load
   useEffect(() => {
     const savedUser = localStorage.getItem('auth_user');
     if (savedUser) {
-      setUser(JSON.parse(savedUser));
+      const parsedUser = JSON.parse(savedUser);
+      setUser(parsedUser);
+      
+      // Redirect admin to admin dashboard if on homepage
+      if (parsedUser.role === 'admin' && location.pathname === '/') {
+        navigate('/admin');
+      }
     }
-  }, []);
+  }, [navigate, location.pathname]);
 
   const login = async (email: string, password: string): Promise<boolean> => {
     // Simulate API call delay
@@ -66,6 +73,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(userWithoutPassword);
       localStorage.setItem('auth_user', JSON.stringify(userWithoutPassword));
       toast.success(`Welcome back, ${userWithoutPassword.name}!`);
+      
+      // Redirect admin users to admin dashboard after login
+      if (userWithoutPassword.role === 'admin') {
+        navigate('/admin');
+      }
+      
       return true;
     } else {
       toast.error('Invalid email or password');

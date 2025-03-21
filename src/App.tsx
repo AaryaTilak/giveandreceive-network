@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import { AuthProvider } from "./hooks/useAuth";
 import Index from "./pages/Index";
@@ -52,8 +52,6 @@ const App = () => (
               <Route index element={<Admin />} />
               <Route path="donations" element={<AdminDonations />} />
               <Route path="requests" element={<AdminRequests />} />
-              <Route path="settings" element={<Admin />} /> {/* Placeholder - would be unique component in real app */}
-              <Route path="help" element={<Admin />} /> {/* Placeholder - would be unique component in real app */}
             </Route>
             
             <Route path="*" element={<NotFound />} />
