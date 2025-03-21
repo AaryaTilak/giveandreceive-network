@@ -73,8 +73,18 @@ export default function RequestForm() {
 
   const onSubmit = (values: FormValues) => {
     try {
-      // TypeScript knows that values from a validated form will have all required fields
-      addRequest(values);
+      // After validation, we know all fields exist and are not optional
+      // TypeScript should recognize values as the required type for addRequest
+      const requestData = {
+        title: values.title,
+        category: values.category,
+        description: values.description,
+        location: values.location,
+        requesterName: values.requesterName,
+        urgency: values.urgency,
+      };
+      
+      addRequest(requestData);
       navigate('/request-success');
     } catch (error) {
       toast({
