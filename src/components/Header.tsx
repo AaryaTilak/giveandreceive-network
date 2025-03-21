@@ -1,12 +1,14 @@
 
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, User } from 'lucide-react';
+import { Menu, X, User, LogOut } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const { isAuthenticated, user, logout, isAdmin } = useAuth();
 
   // Track scroll position to add background to header
   useEffect(() => {
@@ -40,7 +42,30 @@ export default function Header() {
           
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <NavLinks />
+            <NavLinks isAuthenticated={isAuthenticated} isAdmin={isAdmin} />
+            
+            {isAuthenticated ? (
+              <div className="flex items-center gap-4">
+                <span className="text-sm font-medium">
+                  {user?.name} ({user?.role})
+                </span>
+                <button 
+                  onClick={logout}
+                  className="flex items-center gap-1 text-sm font-medium text-destructive hover:underline"
+                >
+                  <LogOut size={16} />
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className="flex items-center gap-1 px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+              >
+                <User size={16} />
+                Login
+              </Link>
+            )}
           </nav>
           
           {/* Mobile Menu Button */}
@@ -57,7 +82,30 @@ export default function Header() {
         {isMenuOpen && (
           <nav className="md:hidden pt-6 pb-4 animate-fade-in">
             <div className="flex flex-col space-y-4">
-              <NavLinks />
+              <NavLinks isAuthenticated={isAuthenticated} isAdmin={isAdmin} />
+              
+              {isAuthenticated ? (
+                <div className="pt-2 border-t border-gray-200 dark:border-gray-800">
+                  <div className="py-2 text-sm font-medium">
+                    {user?.name} ({user?.role})
+                  </div>
+                  <button 
+                    onClick={logout}
+                    className="flex items-center gap-1 text-sm font-medium text-destructive hover:underline"
+                  >
+                    <LogOut size={16} />
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  to="/login"
+                  className="flex items-center gap-1 py-2 text-sm font-medium"
+                >
+                  <User size={16} />
+                  Login
+                </Link>
+              )}
             </div>
           </nav>
         )}
@@ -66,14 +114,25 @@ export default function Header() {
   );
 }
 
-function NavLinks() {
+function NavLinks({ isAuthenticated, isAdmin }: { isAuthenticated: boolean, isAdmin: boolean }) {
   const location = useLocation();
+  
+  // Basic links for everyone
   const links = [
     { to: '/', label: 'Home' },
     { to: '/donations', label: 'Donate' },
     { to: '/requests', label: 'Request Help' },
-    { to: '/profile', label: 'My Profile', icon: User },
   ];
+  
+  // Add profile for authenticated users
+  if (isAuthenticated) {
+    links.push({ to: '/profile', label: 'My Profile', icon: User });
+  }
+  
+  // Add admin link for admins
+  if (isAdmin) {
+    links.push({ to: '/admin', label: 'Admin Panel' });
+  }
   
   return (
     <>
