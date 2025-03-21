@@ -3,9 +3,12 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useDonations } from '@/hooks/useDonations';
 import { useRequests } from '@/hooks/useRequests';
-import { BarChart3, Gift, HeartHandshake, Users } from 'lucide-react';
+import { BarChart3, Gift, HeartHandshake, Users, PieChart } from 'lucide-react';
 import AnimatedElement from '@/components/AnimatedElement';
 import { Link } from 'react-router-dom';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, 
+         PieChart as RPieChart, Pie, Cell } from 'recharts';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 
 export default function Admin() {
   const { donations } = useDonations();
@@ -74,6 +77,32 @@ export default function Admin() {
     },
   ];
 
+  // Mock data for charts
+  const userActivityData = [
+    { name: 'Jan', donations: 4, requests: 2, users: 5 },
+    { name: 'Feb', donations: 6, requests: 4, users: 8 },
+    { name: 'Mar', donations: 8, requests: 7, users: 10 },
+    { name: 'Apr', donations: 10, requests: 8, users: 12 },
+    { name: 'May', donations: 7, requests: 5, users: 9 },
+    { name: 'Jun', donations: 9, requests: 6, users: 14 },
+  ];
+
+  const donationCategoryData = [
+    { name: 'Clothing', value: 35 },
+    { name: 'Food', value: 25 },
+    { name: 'Furniture', value: 15 },
+    { name: 'Electronics', value: 10 },
+    { name: 'Books', value: 15 },
+  ];
+
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
+
+  const chartConfig = {
+    donations: { label: "Donations", color: "#0088FE" },
+    requests: { label: "Requests", color: "#00C49F" },
+    users: { label: "New Users", color: "#FFBB28" },
+  };
+
   return (
     <div className="space-y-6">
       <AnimatedElement animation="fade-up">
@@ -98,9 +127,66 @@ export default function Admin() {
         </div>
       </AnimatedElement>
       
+      {/* Statistical Charts */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <AnimatedElement animation="fade-up" delay={100}>
+          <Card className="h-full">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg">Monthly Activity</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ChartContainer config={chartConfig} className="aspect-[4/3]">
+                <BarChart data={userActivityData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                  <Legend />
+                  <Bar dataKey="donations" fill="var(--color-donations)" name="Donations" />
+                  <Bar dataKey="requests" fill="var(--color-requests)" name="Requests" />
+                  <Bar dataKey="users" fill="var(--color-users)" name="New Users" />
+                </BarChart>
+              </ChartContainer>
+            </CardContent>
+          </Card>
+        </AnimatedElement>
+
+        <AnimatedElement animation="fade-up" delay={200}>
+          <Card className="h-full">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg">Donation Categories</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[300px] flex items-center justify-center">
+                <ResponsiveContainer width="100%" height="100%">
+                  <RPieChart>
+                    <Pie
+                      data={donationCategoryData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={true}
+                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="value"
+                    >
+                      {donationCategoryData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value) => [`${value}%`, 'Percentage']} />
+                    <Legend />
+                  </RPieChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+        </AnimatedElement>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Recent Donations */}
-        <AnimatedElement animation="fade-up" delay={200}>
+        <AnimatedElement animation="fade-up" delay={300}>
           <Card className="h-full">
             <CardHeader className="pb-2">
               <CardTitle className="text-lg">Recent Donations</CardTitle>
@@ -125,7 +211,7 @@ export default function Admin() {
         </AnimatedElement>
         
         {/* Recent Activity */}
-        <AnimatedElement animation="fade-up" delay={300}>
+        <AnimatedElement animation="fade-up" delay={400}>
           <Card className="h-full">
             <CardHeader className="pb-2">
               <CardTitle className="text-lg">Recent Activity</CardTitle>
