@@ -51,6 +51,7 @@ const formSchema = z.object({
   urgency: z.enum(["low", "medium", "high"]),
 });
 
+// This ensures the form values match what addRequest expects
 type FormValues = z.infer<typeof formSchema>;
 
 export default function RequestForm() {
@@ -72,6 +73,7 @@ export default function RequestForm() {
 
   const onSubmit = (values: FormValues) => {
     try {
+      // TypeScript knows that values from a validated form will have all required fields
       addRequest(values);
       navigate('/request-success');
     } catch (error) {

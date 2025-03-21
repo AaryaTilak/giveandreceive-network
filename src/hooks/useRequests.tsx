@@ -120,7 +120,7 @@ export function useRequests() {
   if (context === undefined) {
     return {
       requests: initialRequests,
-      addRequest: () => console.warn('RequestsProvider not found'),
+      addRequest: (request: Omit<RequestItem, 'id' | 'postedDate'>) => console.warn('RequestsProvider not found'),
       loading: false
     };
   }
