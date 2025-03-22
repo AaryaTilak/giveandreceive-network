@@ -6,7 +6,7 @@ import { useRequests } from '@/hooks/useRequests';
 import { BarChart3, Gift, HeartHandshake, Users, PieChart } from 'lucide-react';
 import AnimatedElement from '@/components/AnimatedElement';
 import { Link } from 'react-router-dom';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, 
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, 
          PieChart as RPieChart, Pie, Cell } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 
@@ -136,16 +136,32 @@ export default function Admin() {
             </CardHeader>
             <CardContent>
               <ChartContainer config={chartConfig} className="aspect-[4/3]">
-                <BarChart data={userActivityData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
+                <LineChart data={userActivityData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" />
                   <YAxis />
                   <ChartTooltip content={<ChartTooltipContent />} />
                   <Legend />
-                  <Bar dataKey="donations" fill="var(--color-donations)" name="Donations" />
-                  <Bar dataKey="requests" fill="var(--color-requests)" name="Requests" />
-                  <Bar dataKey="users" fill="var(--color-users)" name="New Users" />
-                </BarChart>
+                  <Line 
+                    type="monotone" 
+                    dataKey="donations" 
+                    stroke="var(--color-donations)" 
+                    name="Donations" 
+                    activeDot={{ r: 8 }}
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="requests" 
+                    stroke="var(--color-requests)" 
+                    name="Requests" 
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="users" 
+                    stroke="var(--color-users)" 
+                    name="New Users"
+                  />
+                </LineChart>
               </ChartContainer>
             </CardContent>
           </Card>
