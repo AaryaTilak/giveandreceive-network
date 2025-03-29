@@ -77,14 +77,20 @@ export default function Admin() {
     },
   ];
 
-  // Mock data for charts
-  const userActivityData = [
+  // Updated mock data for full year chart
+  const yearlyActivityData = [
     { name: 'Jan', donations: 4, requests: 2, users: 5 },
     { name: 'Feb', donations: 6, requests: 4, users: 8 },
     { name: 'Mar', donations: 8, requests: 7, users: 10 },
     { name: 'Apr', donations: 10, requests: 8, users: 12 },
     { name: 'May', donations: 7, requests: 5, users: 9 },
     { name: 'Jun', donations: 9, requests: 6, users: 14 },
+    { name: 'Jul', donations: 12, requests: 9, users: 16 },
+    { name: 'Aug', donations: 15, requests: 11, users: 18 },
+    { name: 'Sep', donations: 11, requests: 8, users: 15 },
+    { name: 'Oct', donations: 10, requests: 7, users: 13 },
+    { name: 'Nov', donations: 8, requests: 6, users: 11 },
+    { name: 'Dec', donations: 14, requests: 12, users: 19 },
   ];
 
   const donationCategoryData = [
@@ -132,11 +138,11 @@ export default function Admin() {
         <AnimatedElement animation="fade-up" delay={100}>
           <Card className="h-full">
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Monthly Activity</CardTitle>
+              <CardTitle className="text-lg">Full Year Report</CardTitle>
             </CardHeader>
             <CardContent>
               <ChartContainer config={chartConfig} className="aspect-[4/3]">
-                <LineChart data={userActivityData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
+                <LineChart data={yearlyActivityData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" />
                   <YAxis />
