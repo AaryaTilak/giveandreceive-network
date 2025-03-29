@@ -1,8 +1,7 @@
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from "@/lib/utils";
-import { BarChart3, Home, Users, Gift, UserCircle, Settings, LifeBuoy, LogOut } from 'lucide-react';
+import { BarChart3, Home, HeartHandshake, Gift, UserCircle, Settings, LifeBuoy, LogOut } from 'lucide-react';
 import { Separator } from "@/components/ui/separator";
 
 interface AdminSidebarProps {
@@ -16,7 +15,7 @@ export default function AdminSidebar({ className }: AdminSidebarProps) {
     { icon: Home, label: "Home", href: "/" },
     { icon: BarChart3, label: "Dashboard", href: "/admin" },
     { icon: Gift, label: "Donations", href: "/admin/donations" },
-    { icon: Users, label: "Users", href: "/admin/users" },
+    { icon: HeartHandshake, label: "Help Requests", href: "/admin/requests" },
   ];
   
   const otherNavItems = [

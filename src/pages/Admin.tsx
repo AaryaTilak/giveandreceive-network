@@ -24,7 +24,7 @@ export default function Admin() {
       link: '/admin/donations',
     },
     {
-      title: 'Total Requests',
+      title: 'Help Requests',
       value: requests.length,
       icon: HeartHandshake,
       color: 'text-rose-500',

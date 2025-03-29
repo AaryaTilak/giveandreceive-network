@@ -58,7 +58,7 @@ export default function AdminLayout() {
                 </TabsTrigger>
                 <TabsTrigger value="requests" asChild>
                   <Link to="/admin/requests" className={`px-4 py-2 ${currentPath === '/admin/requests' ? 'border-b-2 border-primary' : ''}`}>
-                    Available Requests
+                    Help Requests
                   </Link>
                 </TabsTrigger>
               </TabsList>
