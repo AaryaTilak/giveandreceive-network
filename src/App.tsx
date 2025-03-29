@@ -14,6 +14,7 @@ import Admin from "./pages/Admin";
 import AdminLayout from "./pages/AdminLayout";
 import AdminDonations from "./pages/AdminDonations";
 import AdminRequests from "./pages/AdminRequests";
+import AdminSettings from "./pages/AdminSettings";
 import DonationForm from "./pages/DonationForm";
 import DonationSuccess from "./pages/DonationSuccess";
 import RequestForm from "./pages/RequestForm";
@@ -52,6 +53,7 @@ const App = () => (
               <Route index element={<Admin />} />
               <Route path="donations" element={<AdminDonations />} />
               <Route path="requests" element={<AdminRequests />} />
+              <Route path="settings" element={<AdminSettings />} />
             </Route>
             
             <Route path="*" element={<NotFound />} />

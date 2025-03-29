@@ -43,7 +43,8 @@ export default function AdminLayout() {
             <Tabs value={
               currentPath === "/admin" ? "dashboard" :
               currentPath === "/admin/donations" ? "donations" :
-              currentPath === "/admin/requests" ? "requests" : "dashboard"
+              currentPath === "/admin/requests" ? "requests" :
+              currentPath === "/admin/settings" ? "settings" : "dashboard"
             } className="mb-6">
               <TabsList className="w-full border-b bg-transparent">
                 <TabsTrigger value="dashboard" asChild>
@@ -59,6 +60,11 @@ export default function AdminLayout() {
                 <TabsTrigger value="requests" asChild>
                   <Link to="/admin/requests" className={`px-4 py-2 ${currentPath === '/admin/requests' ? 'border-b-2 border-primary' : ''}`}>
                     Help Requests
+                  </Link>
+                </TabsTrigger>
+                <TabsTrigger value="settings" asChild>
+                  <Link to="/admin/settings" className={`px-4 py-2 ${currentPath === '/admin/settings' ? 'border-b-2 border-primary' : ''}`}>
+                    Settings
                   </Link>
                 </TabsTrigger>
               </TabsList>

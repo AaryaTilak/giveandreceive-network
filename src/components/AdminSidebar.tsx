@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from "@/lib/utils";
@@ -16,10 +17,10 @@ export default function AdminSidebar({ className }: AdminSidebarProps) {
     { icon: BarChart3, label: "Dashboard", href: "/admin" },
     { icon: Gift, label: "Donations", href: "/admin/donations" },
     { icon: HeartHandshake, label: "Help Requests", href: "/admin/requests" },
+    { icon: Settings, label: "Settings", href: "/admin/settings" },
   ];
   
   const otherNavItems = [
-    { icon: Settings, label: "Settings", href: "/admin/settings" },
     { icon: LifeBuoy, label: "Help", href: "/admin/help" },
     { icon: LogOut, label: "Logout", href: "/logout" },
   ];
