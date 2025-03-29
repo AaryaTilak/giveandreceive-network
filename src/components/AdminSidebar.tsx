@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from "@/lib/utils";
-import { BarChart3, Home, HeartHandshake, Gift, UserCircle, Settings, LifeBuoy, LogOut } from 'lucide-react';
+import { BarChart3, Home, HeartHandshake, Gift, UserCircle, Settings, LogOut } from 'lucide-react';
 import { Separator } from "@/components/ui/separator";
 
 interface AdminSidebarProps {
@@ -21,7 +21,6 @@ export default function AdminSidebar({ className }: AdminSidebarProps) {
   ];
   
   const otherNavItems = [
-    { icon: LifeBuoy, label: "Help", href: "/admin/help" },
     { icon: LogOut, label: "Logout", href: "/logout" },
   ];
 
@@ -100,3 +99,4 @@ const NavLink = ({ href, label, icon: Icon, isActive }: NavLinkProps) => {
     </Link>
   );
 };
+
