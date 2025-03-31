@@ -1,22 +1,18 @@
 
 import React from 'react';
-import { Outlet, Link, useLocation, Navigate } from 'react-router-dom';
+import { Outlet, Navigate } from 'react-router-dom';
 import AdminSidebar from '@/components/AdminSidebar';
 import { useAuth } from '@/hooks/useAuth';
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function AdminLayout() {
   const { isAdmin, logout, user } = useAuth();
-  const location = useLocation();
   
   // Redirect to home if not an admin
   if (!isAdmin) {
     return <Navigate to="/" replace />;
   }
-  
-  const currentPath = location.pathname;
   
   return (
     <div className="flex h-screen bg-muted/10">
@@ -39,37 +35,7 @@ export default function AdminLayout() {
         </header>
         
         <div className="flex-1 overflow-auto">
-          <div className="container mx-auto p-4">
-            <Tabs value={
-              currentPath === "/admin" ? "dashboard" :
-              currentPath === "/admin/donations" ? "donations" :
-              currentPath === "/admin/requests" ? "requests" :
-              currentPath === "/admin/settings" ? "settings" : "dashboard"
-            } className="mb-6">
-              <TabsList className="w-full border-b bg-transparent">
-                <TabsTrigger value="dashboard" asChild>
-                  <Link to="/admin" className={`px-4 py-2 ${currentPath === '/admin' ? 'border-b-2 border-primary' : ''}`}>
-                    Dashboard
-                  </Link>
-                </TabsTrigger>
-                <TabsTrigger value="donations" asChild>
-                  <Link to="/admin/donations" className={`px-4 py-2 ${currentPath === '/admin/donations' ? 'border-b-2 border-primary' : ''}`}>
-                    Available Donations
-                  </Link>
-                </TabsTrigger>
-                <TabsTrigger value="requests" asChild>
-                  <Link to="/admin/requests" className={`px-4 py-2 ${currentPath === '/admin/requests' ? 'border-b-2 border-primary' : ''}`}>
-                    Help Requests
-                  </Link>
-                </TabsTrigger>
-                <TabsTrigger value="settings" asChild>
-                  <Link to="/admin/settings" className={`px-4 py-2 ${currentPath === '/admin/settings' ? 'border-b-2 border-primary' : ''}`}>
-                    Settings
-                  </Link>
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
-            
+          <div className="container mx-auto p-4">            
             <Outlet />
           </div>
         </div>
