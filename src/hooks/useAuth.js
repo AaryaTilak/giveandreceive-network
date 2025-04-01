@@ -1,116 +1,99 @@
 
-import { useState, useEffect, createContext, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { toast } from 'sonner';
 
-// Sample user data - in a real app this would come from an API
-const users = [
+// Define mock users for demo purposes
+const MOCK_USERS = [
   {
+    id: '1',
+    name: 'Admin User',
     email: 'admin@example.com',
     password: 'admin123',
-    name: 'Admin User',
     role: 'admin'
   },
   {
+    id: '2',
+    name: 'Regular User',
     email: 'user@example.com',
     password: 'user123',
-    name: 'Regular User',
     role: 'user'
   }
 ];
 
-// Create context
-const AuthContext = createContext(null);
+const AuthContext = createContext(undefined);
 
-// Create provider component
-export function AuthProvider({ children }) {
+export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const location = useLocation();
   
-  // Check for existing session on first load
+  // Check for saved user on initial load
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    const savedUser = localStorage.getItem('auth_user');
+    if (savedUser) {
+      const parsedUser = JSON.parse(savedUser);
+      setUser(parsedUser);
+      
+      // Redirect admin to admin dashboard if on homepage
+      if (parsedUser.role === 'admin' && location.pathname === '/') {
+        navigate('/admin');
+      }
     }
-    setLoading(false);
-  }, []);
-  
-  // Login function
+  }, [navigate, location.pathname]);
+
   const login = async (email, password) => {
-    // In a real app, this would be an API call
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const foundUser = users.find(
-          user => user.email === email && user.password === password
-        );
-        
-        if (foundUser) {
-          // Create a safe user object without password
-          const safeUser = {
-            email: foundUser.email,
-            name: foundUser.name,
-            role: foundUser.role
-          };
-          
-          setUser(safeUser);
-          localStorage.setItem('user', JSON.stringify(safeUser));
-          resolve(true);
-        } else {
-          resolve(false);
-        }
-      }, 800); // Simulated API delay
-    });
+    // Simulate API call delay
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    const foundUser = MOCK_USERS.find(
+      u => u.email.toLowerCase() === email.toLowerCase() && u.password === password
+    );
+    
+    if (foundUser) {
+      const { password: _, ...userWithoutPassword } = foundUser;
+      setUser(userWithoutPassword);
+      localStorage.setItem('auth_user', JSON.stringify(userWithoutPassword));
+      toast.success(`Welcome back, ${userWithoutPassword.name}!`);
+      
+      // Redirect admin users to admin dashboard after login
+      if (userWithoutPassword.role === 'admin') {
+        navigate('/admin');
+      }
+      
+      return true;
+    } else {
+      toast.error('Invalid email or password');
+      return false;
+    }
   };
-  
-  // Logout function
+
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('user');
+    localStorage.removeItem('auth_user');
+    toast.info('You have been logged out');
+    navigate('/login');
   };
-  
-  const authValues = {
-    user,
-    isAuthenticated: !!user,
-    isAdmin: user?.role === 'admin',
-    login,
-    logout,
-    loading
-  };
-  
+
   return (
-    <AuthContext.Provider value={authValues}>
+    <AuthContext.Provider 
+      value={{ 
+        user, 
+        isAuthenticated: !!user,
+        isAdmin: user?.role === 'admin',
+        login, 
+        logout
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
-}
+};
 
-// Hook for using auth context
-export function useAuth() {
+export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (context === null) {
+  if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-}
-
-// Protected route component
-export function RequireAuth({ children, adminOnly = false }) {
-  const { user, isAuthenticated, loading } = useAuth();
-  const navigate = useNavigate();
-  
-  useEffect(() => {
-    if (!loading && !isAuthenticated) {
-      navigate('/login');
-    }
-    
-    if (!loading && adminOnly && user?.role !== 'admin') {
-      navigate('/'); // Not admin, redirect to home
-    }
-  }, [isAuthenticated, loading, navigate, user, adminOnly]);
-  
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-  
-  return isAuthenticated ? children : null;
-}
+};

@@ -1,7 +1,8 @@
 
-import { useState } from 'react';
+import { useState, useEffect, createContext, useContext } from 'react';
+import { useToast } from '@/components/ui/use-toast';
 
-// Sample donation data
+// Sample initial data
 const initialDonations = [
   {
     id: '1',
@@ -65,53 +66,87 @@ const initialDonations = [
   }
 ];
 
-export function useDonations() {
-  const [donations, setDonations] = useState(initialDonations);
-  const [loading, setLoading] = useState(false);
+const DonationsContext = createContext(undefined);
 
-  const addDonation = (donationData) => {
+export function DonationsProvider({ children }) {
+  const [donations, setDonations] = useState(() => {
+    const savedDonations = localStorage.getItem('donations');
+    return savedDonations ? JSON.parse(savedDonations) : initialDonations;
+  });
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    localStorage.setItem('donations', JSON.stringify(donations));
+  }, [donations]);
+
+  const addDonation = (newDonation) => {
     setLoading(true);
     
-    // In a real app, you would make an API call here
+    // Simulate API call
     setTimeout(() => {
-      const newDonation = {
-        id: String(Date.now()),
-        ...donationData,
+      const donation = {
+        ...newDonation,
+        id: `${Date.now()}`,
         postedDate: 'Just now'
       };
       
-      setDonations(prevDonations => [newDonation, ...prevDonations]);
+      setDonations(prev => [donation, ...prev]);
       setLoading(false);
-    }, 500);
+      
+      toast({
+        title: "Donation added successfully",
+        description: "Your donation has been added to the listings",
+      });
+    }, 1000);
   };
 
   const editDonation = (updatedDonation) => {
     setLoading(true);
     
-    // In a real app, you would make an API call here
+    // Simulate API call
     setTimeout(() => {
-      setDonations(prevDonations => 
-        prevDonations.map(donation => 
+      setDonations(prev => 
+        prev.map(donation => 
           donation.id === updatedDonation.id ? updatedDonation : donation
         )
       );
-      
       setLoading(false);
-    }, 500);
+      
+      toast({
+        title: "Donation updated successfully",
+        description: "Your donation has been updated",
+      });
+    }, 1000);
   };
 
   const deleteDonation = (id) => {
     setLoading(true);
     
-    // In a real app, you would make an API call here
+    // Simulate API call
     setTimeout(() => {
-      setDonations(prevDonations => 
-        prevDonations.filter(donation => donation.id !== id)
-      );
-      
+      setDonations(prev => prev.filter(donation => donation.id !== id));
       setLoading(false);
     }, 500);
   };
 
-  return { donations, loading, addDonation, editDonation, deleteDonation };
+  return (
+    <DonationsContext.Provider value={{ donations, addDonation, editDonation, deleteDonation, loading }}>
+      {children}
+    </DonationsContext.Provider>
+  );
+}
+
+export function useDonations() {
+  const context = useContext(DonationsContext);
+  if (context === undefined) {
+    return {
+      donations: initialDonations,
+      addDonation: () => console.warn('DonationsProvider not found'),
+      editDonation: () => console.warn('DonationsProvider not found'),
+      deleteDonation: () => console.warn('DonationsProvider not found'),
+      loading: false
+    };
+  }
+  return context;
 }

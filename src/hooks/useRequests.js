@@ -1,7 +1,8 @@
 
-import { useState } from 'react';
+import { useState, useEffect, createContext, useContext } from 'react';
+import { useToast } from '@/components/ui/use-toast';
 
-// Sample request data
+// Sample initial data
 const initialRequests = [
   {
     id: '1',
@@ -55,53 +56,87 @@ const initialRequests = [
   }
 ];
 
-export function useRequests() {
-  const [requests, setRequests] = useState(initialRequests);
+const RequestsContext = createContext(undefined);
+
+export function RequestsProvider({ children }) {
+  const [requests, setRequests] = useState(() => {
+    const savedRequests = localStorage.getItem('requests');
+    return savedRequests ? JSON.parse(savedRequests) : initialRequests;
+  });
   const [loading, setLoading] = useState(false);
-  
-  const addRequest = (requestData) => {
+  const { toast } = useToast();
+
+  useEffect(() => {
+    localStorage.setItem('requests', JSON.stringify(requests));
+  }, [requests]);
+
+  const addRequest = (newRequest) => {
     setLoading(true);
     
-    // In a real app, you would make an API call here
+    // Simulate API call
     setTimeout(() => {
-      const newRequest = {
-        id: String(Date.now()),
-        ...requestData,
+      const request = {
+        ...newRequest,
+        id: `${Date.now()}`,
         postedDate: 'Just now'
       };
       
-      setRequests(prevRequests => [newRequest, ...prevRequests]);
+      setRequests(prev => [request, ...prev]);
       setLoading(false);
-    }, 500);
+      
+      toast({
+        title: "Request added successfully",
+        description: "Your help request has been posted",
+      });
+    }, 1000);
   };
-  
+
   const editRequest = (updatedRequest) => {
     setLoading(true);
     
-    // In a real app, you would make an API call here
+    // Simulate API call
     setTimeout(() => {
-      setRequests(prevRequests => 
-        prevRequests.map(request => 
+      setRequests(prev => 
+        prev.map(request => 
           request.id === updatedRequest.id ? updatedRequest : request
         )
       );
-      
       setLoading(false);
-    }, 500);
+      
+      toast({
+        title: "Request updated successfully",
+        description: "Your help request has been updated",
+      });
+    }, 1000);
   };
-  
+
   const deleteRequest = (id) => {
     setLoading(true);
     
-    // In a real app, you would make an API call here
+    // Simulate API call
     setTimeout(() => {
-      setRequests(prevRequests => 
-        prevRequests.filter(request => request.id !== id)
-      );
-      
+      setRequests(prev => prev.filter(request => request.id !== id));
       setLoading(false);
     }, 500);
   };
-  
-  return { requests, loading, addRequest, editRequest, deleteRequest };
+
+  return (
+    <RequestsContext.Provider value={{ requests, addRequest, editRequest, deleteRequest, loading }}>
+      {children}
+    </RequestsContext.Provider>
+  );
+}
+
+export function useRequests() {
+  const context = useContext(RequestsContext);
+  if (context === undefined) {
+    return {
+      requests: initialRequests,
+      addRequest: (request) => console.warn('RequestsProvider not found'),
+      editRequest: () => console.warn('RequestsProvider not found'),
+      deleteRequest: () => console.warn('RequestsProvider not found'),
+      loading: false
+    };
+  }
+  return context;
 }
