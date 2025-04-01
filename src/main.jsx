@@ -1,19 +1,17 @@
 
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-import App from "./App";
-import "./index.css";
-import { AuthProvider } from "./hooks/useAuth";
-import { Toaster } from "./components/ui/toaster";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.jsx';
+import './index.css';
+import { DonationsProvider } from './hooks/useDonations.js';
+import { RequestsProvider } from './hooks/useRequests.js';
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <AuthProvider>
+    <DonationsProvider>
+      <RequestsProvider>
         <App />
-        <Toaster />
-      </AuthProvider>
-    </BrowserRouter>
-  </React.StrictMode>
+      </RequestsProvider>
+    </DonationsProvider>
+  </React.StrictMode>,
 );
