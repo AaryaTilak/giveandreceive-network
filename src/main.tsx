@@ -1,10 +1,10 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
+import App from './App.jsx';
 import './index.css';
-import { DonationsProvider } from './hooks/useDonations.tsx';
-import { RequestsProvider } from './hooks/useRequests.tsx';
+import { DonationsProvider } from './hooks/useDonations.js';
+import { RequestsProvider } from './hooks/useRequests.js';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
