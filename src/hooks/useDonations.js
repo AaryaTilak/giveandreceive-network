@@ -1,8 +1,9 @@
 
 import { useState, useEffect, createContext, useContext } from 'react';
 import { useToast } from '@/components/ui/use-toast';
+import axios from 'axios';
 
-// Sample initial data
+// Sample initial data - will be replaced by data from API
 const initialDonations = [
   {
     id: '1',
@@ -66,68 +67,118 @@ const initialDonations = [
   }
 ];
 
+const API_URL = 'http://localhost:5000/api/donations';
+
 const DonationsContext = createContext(undefined);
 
 export function DonationsProvider({ children }) {
-  const [donations, setDonations] = useState(() => {
-    const savedDonations = localStorage.getItem('donations');
-    return savedDonations ? JSON.parse(savedDonations) : initialDonations;
-  });
-  const [loading, setLoading] = useState(false);
+  const [donations, setDonations] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
+  // Fetch all donations from API
   useEffect(() => {
-    localStorage.setItem('donations', JSON.stringify(donations));
-  }, [donations]);
+    const fetchDonations = async () => {
+      try {
+        const response = await axios.get(API_URL);
+        // Map MongoDB _id to id for frontend compatibility
+        const mappedDonations = response.data.map(donation => ({
+          ...donation,
+          id: donation._id
+        }));
+        setDonations(mappedDonations);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching donations:', error);
+        setDonations(initialDonations); // Fallback to initial data if API fails
+        setLoading(false);
+        toast({
+          title: "Connection error",
+          description: "Could not connect to the server. Using sample data instead.",
+          variant: "destructive",
+        });
+      }
+    };
 
-  const addDonation = (newDonation) => {
+    fetchDonations();
+  }, [toast]);
+
+  const addDonation = async (newDonation) => {
     setLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      const donation = {
-        ...newDonation,
-        id: `${Date.now()}`,
-        postedDate: 'Just now'
-      };
+    try {
+      const response = await axios.post(API_URL, newDonation);
+      const addedDonation = { ...response.data, id: response.data._id };
       
-      setDonations(prev => [donation, ...prev]);
-      setLoading(false);
+      setDonations(prev => [addedDonation, ...prev]);
       
       toast({
         title: "Donation added successfully",
         description: "Your donation has been added to the listings",
       });
-    }, 1000);
+    } catch (error) {
+      console.error('Error adding donation:', error);
+      toast({
+        title: "Error",
+        description: "Failed to add donation. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const editDonation = (updatedDonation) => {
+  const editDonation = async (updatedDonation) => {
     setLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      // Use MongoDB _id for API call
+      const { id, ...donationData } = updatedDonation;
+      await axios.put(`${API_URL}/${id}`, donationData);
+      
       setDonations(prev => 
         prev.map(donation => 
-          donation.id === updatedDonation.id ? updatedDonation : donation
+          donation.id === id ? updatedDonation : donation
         )
       );
-      setLoading(false);
       
       toast({
         title: "Donation updated successfully",
         description: "Your donation has been updated",
       });
-    }, 1000);
+    } catch (error) {
+      console.error('Error updating donation:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update donation. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const deleteDonation = (id) => {
+  const deleteDonation = async (id) => {
     setLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      await axios.delete(`${API_URL}/${id}`);
       setDonations(prev => prev.filter(donation => donation.id !== id));
+      
+      toast({
+        title: "Donation deleted successfully",
+        description: "Your donation has been removed",
+      });
+    } catch (error) {
+      console.error('Error deleting donation:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete donation. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setLoading(false);
-    }, 500);
+    }
   };
 
   return (

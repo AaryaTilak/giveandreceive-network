@@ -1,8 +1,9 @@
 
 import { useState, useEffect, createContext, useContext } from 'react';
 import { useToast } from '@/components/ui/use-toast';
+import axios from 'axios';
 
-// Sample initial data
+// Sample initial data - will be replaced by data from API
 const initialRequests = [
   {
     id: '1',
@@ -56,68 +57,118 @@ const initialRequests = [
   }
 ];
 
+const API_URL = 'http://localhost:5000/api/requests';
+
 const RequestsContext = createContext(undefined);
 
 export function RequestsProvider({ children }) {
-  const [requests, setRequests] = useState(() => {
-    const savedRequests = localStorage.getItem('requests');
-    return savedRequests ? JSON.parse(savedRequests) : initialRequests;
-  });
-  const [loading, setLoading] = useState(false);
+  const [requests, setRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
+  // Fetch all requests from API
   useEffect(() => {
-    localStorage.setItem('requests', JSON.stringify(requests));
-  }, [requests]);
+    const fetchRequests = async () => {
+      try {
+        const response = await axios.get(API_URL);
+        // Map MongoDB _id to id for frontend compatibility
+        const mappedRequests = response.data.map(request => ({
+          ...request,
+          id: request._id
+        }));
+        setRequests(mappedRequests);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching requests:', error);
+        setRequests(initialRequests); // Fallback to initial data if API fails
+        setLoading(false);
+        toast({
+          title: "Connection error",
+          description: "Could not connect to the server. Using sample data instead.",
+          variant: "destructive",
+        });
+      }
+    };
 
-  const addRequest = (newRequest) => {
+    fetchRequests();
+  }, [toast]);
+
+  const addRequest = async (newRequest) => {
     setLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      const request = {
-        ...newRequest,
-        id: `${Date.now()}`,
-        postedDate: 'Just now'
-      };
+    try {
+      const response = await axios.post(API_URL, newRequest);
+      const addedRequest = { ...response.data, id: response.data._id };
       
-      setRequests(prev => [request, ...prev]);
-      setLoading(false);
+      setRequests(prev => [addedRequest, ...prev]);
       
       toast({
         title: "Request added successfully",
         description: "Your help request has been posted",
       });
-    }, 1000);
+    } catch (error) {
+      console.error('Error adding request:', error);
+      toast({
+        title: "Error",
+        description: "Failed to add request. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const editRequest = (updatedRequest) => {
+  const editRequest = async (updatedRequest) => {
     setLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      // Use MongoDB _id for API call
+      const { id, ...requestData } = updatedRequest;
+      await axios.put(`${API_URL}/${id}`, requestData);
+      
       setRequests(prev => 
         prev.map(request => 
-          request.id === updatedRequest.id ? updatedRequest : request
+          request.id === id ? updatedRequest : request
         )
       );
-      setLoading(false);
       
       toast({
         title: "Request updated successfully",
         description: "Your help request has been updated",
       });
-    }, 1000);
+    } catch (error) {
+      console.error('Error updating request:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update request. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const deleteRequest = (id) => {
+  const deleteRequest = async (id) => {
     setLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      await axios.delete(`${API_URL}/${id}`);
       setRequests(prev => prev.filter(request => request.id !== id));
+      
+      toast({
+        title: "Request deleted successfully",
+        description: "Your help request has been removed",
+      });
+    } catch (error) {
+      console.error('Error deleting request:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete request. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setLoading(false);
-    }, 500);
+    }
   };
 
   return (
