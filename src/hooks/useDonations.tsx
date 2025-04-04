@@ -1,4 +1,5 @@
-import { useState, useEffect, createContext, useContext } from 'react';
+
+import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
 import { useToast } from '@/components/ui/use-toast';
 import axios from 'axios';
 
@@ -91,7 +92,11 @@ interface DonationsContextType {
 
 const DonationsContext = createContext<DonationsContextType | undefined>(undefined);
 
-export function DonationsProvider({ children }: { children: React.ReactNode }) {
+interface DonationsProviderProps {
+  children: ReactNode;
+}
+
+export function DonationsProvider({ children }: DonationsProviderProps) {
   const [donations, setDonations] = useState<DonationItem[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -128,7 +133,11 @@ export function DonationsProvider({ children }: { children: React.ReactNode }) {
     
     try {
       const response = await axios.post(API_URL, newDonation);
-      const addedDonation: DonationItem = { ...response.data, id: response.data._id, postedDate: 'Just now' };
+      const addedDonation: DonationItem = { 
+        ...response.data, 
+        id: response.data._id,
+        postedDate: 'Just now'
+      };
       
       setDonations(prev => [addedDonation, ...prev]);
       
