@@ -11,14 +11,14 @@ import AnimatedElement from "@/components/AnimatedElement";
 export default function AdminRequests() {
   const { requests, deleteRequest } = useRequests();
 
-  const handleDeleteRequest = (id: string) => {
+  const handleDeleteRequest = (id) => {
     if (window.confirm("Are you sure you want to delete this request?")) {
       deleteRequest(id);
       toast.success("Request deleted successfully");
     }
   };
 
-  const getUrgencyColor = (urgency: string) => {
+  const getUrgencyColor = (urgency) => {
     switch (urgency) {
       case 'high':
         return 'bg-red-500';

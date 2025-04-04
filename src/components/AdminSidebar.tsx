@@ -5,11 +5,7 @@ import { cn } from "@/lib/utils";
 import { BarChart3, Gift, UserCircle, Settings, LogOut, HeartHandshake } from 'lucide-react';
 import { Separator } from "@/components/ui/separator";
 
-interface AdminSidebarProps {
-  className?: string;
-}
-
-export default function AdminSidebar({ className }: AdminSidebarProps) {
+export default function AdminSidebar({ className }) {
   const location = useLocation();
   
   const mainNavItems = [
@@ -75,14 +71,7 @@ export default function AdminSidebar({ className }: AdminSidebarProps) {
   );
 }
 
-interface NavLinkProps {
-  href: string;
-  label: string;
-  icon: React.ElementType;
-  isActive: boolean;
-}
-
-const NavLink = ({ href, label, icon: Icon, isActive }: NavLinkProps) => {
+const NavLink = ({ href, label, icon: Icon, isActive }) => {
   return (
     <Link
       to={href}

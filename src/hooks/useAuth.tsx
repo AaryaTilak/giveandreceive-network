@@ -1,10 +1,15 @@
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 
-// Create the auth context
-const AuthContext = createContext(undefined);
+// Define types for user
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: 'admin' | 'user';
+}
 
 // Mock users for demo purposes
 const MOCK_USERS = [
@@ -13,19 +18,33 @@ const MOCK_USERS = [
     name: 'Admin User',
     email: 'admin@example.com',
     password: 'admin123',
-    role: 'admin'
+    role: 'admin' as const
   },
   {
     id: '2',
     name: 'Regular User',
     email: 'user@example.com',
     password: 'user123',
-    role: 'user'
+    role: 'user' as const
   }
 ];
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+interface AuthContextType {
+  user: User | null;
+  isAuthenticated: boolean;
+  isAdmin: boolean;
+  login: (email: string, password: string) => Promise<boolean>;
+  logout: () => void;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -43,7 +62,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, [navigate, location.pathname]);
 
-  const login = async (email, password) => {
+  const login = async (email: string, password: string): Promise<boolean> => {
     // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 500));
     

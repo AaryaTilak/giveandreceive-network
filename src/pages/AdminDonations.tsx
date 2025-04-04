@@ -11,7 +11,7 @@ import AnimatedElement from "@/components/AnimatedElement";
 export default function AdminDonations() {
   const { donations, deleteDonation } = useDonations();
 
-  const handleDeleteDonation = (id: string) => {
+  const handleDeleteDonation = (id) => {
     if (window.confirm("Are you sure you want to delete this donation?")) {
       deleteDonation(id);
       toast.success("Donation deleted successfully");
