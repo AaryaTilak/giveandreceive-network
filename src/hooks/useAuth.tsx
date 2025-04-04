@@ -1,50 +1,30 @@
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 
-// Define types for user
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: 'admin' | 'user';
-}
-
-// Mock users for demo purposes
+// Define mock users for demo purposes
 const MOCK_USERS = [
   {
     id: '1',
     name: 'Admin User',
     email: 'admin@example.com',
     password: 'admin123',
-    role: 'admin' as const
+    role: 'admin'
   },
   {
     id: '2',
     name: 'Regular User',
     email: 'user@example.com',
     password: 'user123',
-    role: 'user' as const
+    role: 'user'
   }
 ];
 
-interface AuthContextType {
-  user: User | null;
-  isAuthenticated: boolean;
-  isAdmin: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
-  logout: () => void;
-}
+const AuthContext = createContext(undefined);
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-interface AuthProviderProps {
-  children: ReactNode;
-}
-
-export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [user, setUser] = useState<User | null>(null);
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -62,7 +42,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }, [navigate, location.pathname]);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const login = async (email, password) => {
     // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 500));
     
