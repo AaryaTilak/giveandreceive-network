@@ -38,43 +38,33 @@ const initialRequests: RequestItem[] = [
   },
   {
     id: '3',
-    title: 'Winter Coat for Teenager',
+    title: 'Winter Jackets for Family',
     category: 'Clothing',
-    description: 'Looking for a warm winter coat for a 16-year-old boy. Size L/XL preferred.',
-    location: 'Chicago, IL',
+    description: 'Family of four needs warm winter jackets for the upcoming cold season. Children ages 5 and 8, and two adults.',
+    location: 'Denver, CO',
     requesterName: 'Maria Gonzalez',
     urgency: 'medium',
-    postedDate: '3 days ago'
+    postedDate: '2 days ago'
   },
   {
     id: '4',
-    title: 'Basic Groceries Needed',
-    category: 'Food',
-    description: 'Family of four in need of basic groceries for the week. Any help with non-perishable items would be greatly appreciated.',
+    title: 'Baby Formula and Diapers',
+    category: 'Children',
+    description: 'Single mother in need of baby formula and size 2 diapers for 3-month-old baby.',
     location: 'Atlanta, GA',
-    requesterName: 'James Wilson',
+    requesterName: 'Jasmine Taylor',
     urgency: 'high',
-    postedDate: '1 day ago'
+    postedDate: '7 hours ago'
   },
   {
     id: '5',
-    title: 'Furniture for New Apartment',
-    category: 'Furniture',
-    description: 'Recently moved into a new apartment and in need of basic furniture - a table, chairs, and a bed frame if possible.',
-    location: 'San Francisco, CA',
-    requesterName: 'Alex Johnson',
-    urgency: 'low',
-    postedDate: '1 week ago'
-  },
-  {
-    id: '6',
-    title: 'Math Tutoring for 8th Grader',
+    title: 'Transportation Help for Medical Appointments',
     category: 'Services',
-    description: 'Looking for someone who can provide math tutoring for my 8th-grade daughter who is struggling with algebra.',
-    location: 'Remote',
-    requesterName: 'Patricia Lee',
-    urgency: 'medium',
-    postedDate: '5 days ago'
+    description: 'Elderly person needs transportation assistance for weekly medical appointments for the next month.',
+    location: 'Chicago, IL',
+    requesterName: 'Harold Johnson',
+    urgency: 'low',
+    postedDate: '6 days ago'
   }
 ];
 
