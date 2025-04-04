@@ -1,6 +1,6 @@
-
 import { useState, useEffect, createContext, useContext } from 'react';
 import { useToast } from '@/components/ui/use-toast';
+import axios from 'axios';
 
 export interface RequestItem {
   id: string;
@@ -13,7 +13,7 @@ export interface RequestItem {
   postedDate: string;
 }
 
-// Sample initial data
+// Sample initial data - will be replaced by data from API
 const initialRequests: RequestItem[] = [
   {
     id: '1',
@@ -77,6 +77,8 @@ const initialRequests: RequestItem[] = [
   }
 ];
 
+const API_URL = 'http://localhost:5000/api/requests';
+
 interface RequestsContextType {
   requests: RequestItem[];
   addRequest: (request: Omit<RequestItem, 'id' | 'postedDate'>) => void;
@@ -88,65 +90,117 @@ interface RequestsContextType {
 const RequestsContext = createContext<RequestsContextType | undefined>(undefined);
 
 export function RequestsProvider({ children }: { children: React.ReactNode }) {
-  const [requests, setRequests] = useState<RequestItem[]>(() => {
-    const savedRequests = localStorage.getItem('requests');
-    return savedRequests ? JSON.parse(savedRequests) : initialRequests;
-  });
-  const [loading, setLoading] = useState(false);
+  const [requests, setRequests] = useState<RequestItem[]>([]);
+  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
+  // Fetch all requests from API
   useEffect(() => {
-    localStorage.setItem('requests', JSON.stringify(requests));
-  }, [requests]);
+    const fetchRequests = async () => {
+      try {
+        const response = await axios.get(API_URL);
+        // Map MongoDB _id to id for frontend compatibility
+        const mappedRequests = response.data.map((request: any) => ({
+          ...request,
+          id: request._id
+        }));
+        setRequests(mappedRequests);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching requests:', error);
+        setRequests(initialRequests); // Fallback to initial data if API fails
+        setLoading(false);
+        toast({
+          title: "Connection error",
+          description: "Could not connect to the server. Using sample data instead.",
+          variant: "destructive",
+        });
+      }
+    };
 
-  const addRequest = (newRequest: Omit<RequestItem, 'id' | 'postedDate'>) => {
+    fetchRequests();
+  }, [toast]);
+
+  const addRequest = async (newRequest: Omit<RequestItem, 'id' | 'postedDate'>) => {
     setLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      const request: RequestItem = {
-        ...newRequest,
-        id: `${Date.now()}`,
+    try {
+      const response = await axios.post(API_URL, newRequest);
+      const addedRequest: RequestItem = { 
+        ...response.data, 
+        id: response.data._id,
         postedDate: 'Just now'
       };
       
-      setRequests(prev => [request, ...prev]);
-      setLoading(false);
+      setRequests(prev => [addedRequest, ...prev]);
       
       toast({
         title: "Request added successfully",
         description: "Your help request has been posted",
       });
-    }, 1000);
+    } catch (error) {
+      console.error('Error adding request:', error);
+      toast({
+        title: "Error",
+        description: "Failed to add request. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const editRequest = (updatedRequest: RequestItem) => {
+  const editRequest = async (updatedRequest: RequestItem) => {
     setLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      // Use MongoDB _id for API call
+      const { id, ...requestData } = updatedRequest;
+      await axios.put(`${API_URL}/${id}`, requestData);
+      
       setRequests(prev => 
         prev.map(request => 
-          request.id === updatedRequest.id ? updatedRequest : request
+          request.id === id ? updatedRequest : request
         )
       );
-      setLoading(false);
       
       toast({
         title: "Request updated successfully",
         description: "Your help request has been updated",
       });
-    }, 1000);
+    } catch (error) {
+      console.error('Error updating request:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update request. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const deleteRequest = (id: string) => {
+  const deleteRequest = async (id: string) => {
     setLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      await axios.delete(`${API_URL}/${id}`);
       setRequests(prev => prev.filter(request => request.id !== id));
+      
+      toast({
+        title: "Request deleted successfully",
+        description: "Your help request has been removed",
+      });
+    } catch (error) {
+      console.error('Error deleting request:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete request. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setLoading(false);
-    }, 500);
+    }
   };
 
   return (
