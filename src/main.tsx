@@ -3,8 +3,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
 import './index.css';
-import { DonationsProvider } from './hooks/useDonations.js';
-import { RequestsProvider } from './hooks/useRequests.js';
+import { DonationsProvider } from './hooks/useDonations';
+import { RequestsProvider } from './hooks/useRequests';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -13,5 +13,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <App />
       </RequestsProvider>
     </DonationsProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );
