@@ -1,10 +1,23 @@
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 
-// Define mock users for demo purposes
-const MOCK_USERS = [
+// Define types for user
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: 'admin' | 'user';
+}
+
+// Define types for mock users including password
+interface MockUser extends User {
+  password: string;
+}
+
+// Mock users for demo purposes
+const MOCK_USERS: MockUser[] = [
   {
     id: '1',
     name: 'Admin User',
@@ -21,10 +34,22 @@ const MOCK_USERS = [
   }
 ];
 
-const AuthContext = createContext(undefined);
+interface AuthContextType {
+  user: User | null;
+  isAuthenticated: boolean;
+  isAdmin: boolean;
+  login: (email: string, password: string) => Promise<boolean>;
+  logout: () => void;
+}
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -32,7 +57,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const savedUser = localStorage.getItem('auth_user');
     if (savedUser) {
-      const parsedUser = JSON.parse(savedUser);
+      const parsedUser = JSON.parse(savedUser) as User;
       setUser(parsedUser);
       
       // Redirect admin to admin dashboard if on homepage
@@ -42,7 +67,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, [navigate, location.pathname]);
 
-  const login = async (email, password) => {
+  const login = async (email: string, password: string): Promise<boolean> => {
     // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 500));
     
