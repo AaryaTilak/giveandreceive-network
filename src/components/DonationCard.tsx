@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin, User } from "lucide-react";
 import { Link } from "react-router-dom";
+import { DonationItem } from "@/hooks/useDonations";
 import {
   Dialog,
   DialogContent,
@@ -18,24 +19,28 @@ import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/components/ui/use-toast";
 
-export default function DonationCard({ donation }) {
+interface DonationCardProps {
+  donation: DonationItem;
+}
+
+export default function DonationCard({ donation }: DonationCardProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     
     // Form data collection
     const formData = new FormData(e.currentTarget);
     const requestData = {
-      name: formData.get("name"),
-      email: formData.get("email"),
-      phone: formData.get("phone"),
-      address: formData.get("address"),
-      transferMethod: formData.get("transferMethod"),
-      additionalInfo: formData.get("additionalInfo"),
+      name: formData.get("name") as string,
+      email: formData.get("email") as string,
+      phone: formData.get("phone") as string,
+      address: formData.get("address") as string,
+      transferMethod: formData.get("transferMethod") as string,
+      additionalInfo: formData.get("additionalInfo") as string,
       donationId: donation.id,
       donationTitle: donation.title,
     };

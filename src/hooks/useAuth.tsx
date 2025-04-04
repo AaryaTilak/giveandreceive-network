@@ -1,54 +1,47 @@
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 
-// Define types for user
+// Define user types
+type UserRole = 'admin' | 'user';
+
 interface User {
   id: string;
   name: string;
   email: string;
-  role: 'admin' | 'user';
+  role: UserRole;
 }
 
-// Define types for mock users including password
-interface MockUser extends User {
-  password: string;
+interface AuthContextType {
+  user: User | null;
+  isAuthenticated: boolean;
+  login: (email: string, password: string) => Promise<boolean>;
+  logout: () => void;
+  isAdmin: boolean;
 }
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Mock users for demo purposes
-const MOCK_USERS: MockUser[] = [
+const MOCK_USERS = [
   {
     id: '1',
     name: 'Admin User',
     email: 'admin@example.com',
     password: 'admin123',
-    role: 'admin'
+    role: 'admin' as UserRole
   },
   {
     id: '2',
     name: 'Regular User',
     email: 'user@example.com',
     password: 'user123',
-    role: 'user'
+    role: 'user' as UserRole
   }
 ];
 
-interface AuthContextType {
-  user: User | null;
-  isAuthenticated: boolean;
-  isAdmin: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
-  logout: () => void;
-}
-
-interface AuthProviderProps {
-  children: ReactNode;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-export const AuthProvider = ({ children }: AuthProviderProps) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -57,7 +50,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     const savedUser = localStorage.getItem('auth_user');
     if (savedUser) {
-      const parsedUser = JSON.parse(savedUser) as User;
+      const parsedUser = JSON.parse(savedUser);
       setUser(parsedUser);
       
       // Redirect admin to admin dashboard if on homepage

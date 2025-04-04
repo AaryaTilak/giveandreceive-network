@@ -6,7 +6,7 @@ import './index.css';
 import { DonationsProvider } from './hooks/useDonations.tsx';
 import { RequestsProvider } from './hooks/useRequests.tsx';
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <DonationsProvider>
       <RequestsProvider>
