@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 
 // Define user types
-type UserRole = 'admin' | 'user';
+type UserRole = 'user';
 
 interface User {
   id: string;
@@ -18,20 +18,12 @@ interface AuthContextType {
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
-  isAdmin: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Mock users for demo purposes
 const MOCK_USERS = [
-  {
-    id: '1',
-    name: 'Admin User',
-    email: 'admin@example.com',
-    password: 'admin123',
-    role: 'admin' as UserRole
-  },
   {
     id: '2',
     name: 'Regular User',
@@ -52,11 +44,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (savedUser) {
       const parsedUser = JSON.parse(savedUser);
       setUser(parsedUser);
-      
-      // Redirect admin to admin dashboard if on homepage
-      if (parsedUser.role === 'admin' && location.pathname === '/') {
-        navigate('/admin');
-      }
     }
   }, [navigate, location.pathname]);
 
@@ -73,12 +60,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(userWithoutPassword);
       localStorage.setItem('auth_user', JSON.stringify(userWithoutPassword));
       toast.success(`Welcome back, ${userWithoutPassword.name}!`);
-      
-      // Redirect admin users to admin dashboard after login
-      if (userWithoutPassword.role === 'admin') {
-        navigate('/admin');
-      }
-      
       return true;
     } else {
       toast.error('Invalid email or password');
@@ -98,7 +79,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       value={{ 
         user, 
         isAuthenticated: !!user,
-        isAdmin: user?.role === 'admin',
         login, 
         logout
       }}

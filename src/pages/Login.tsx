@@ -4,7 +4,7 @@ import { useNavigate, Navigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Key, Mail, Eye, EyeOff, User, Lock } from 'lucide-react';
+import { Mail, Eye, EyeOff, User, Lock } from 'lucide-react';
 
 import { useAuth } from '@/hooks/useAuth';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
@@ -155,9 +155,6 @@ export default function Login() {
             <div className="w-full border-t pt-4">
               <div className="text-sm text-center text-muted-foreground">
                 <p>Demo Credentials:</p>
-                <p className="flex items-center justify-center gap-1 mt-1">
-                  <User className="h-3 w-3" /> Admin: admin@example.com / admin123
-                </p>
                 <p className="flex items-center justify-center gap-1 mt-1">
                   <User className="h-3 w-3" /> User: user@example.com / user123
                 </p>

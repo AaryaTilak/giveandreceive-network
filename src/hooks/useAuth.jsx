@@ -6,13 +6,6 @@ import { toast } from 'sonner';
 // Define mock users for demo purposes
 const MOCK_USERS = [
   {
-    id: '1',
-    name: 'Admin User',
-    email: 'admin@example.com',
-    password: 'admin123',
-    role: 'admin'
-  },
-  {
     id: '2',
     name: 'Regular User',
     email: 'user@example.com',
@@ -34,11 +27,6 @@ export const AuthProvider = ({ children }) => {
     if (savedUser) {
       const parsedUser = JSON.parse(savedUser);
       setUser(parsedUser);
-      
-      // Redirect admin to admin dashboard if on homepage
-      if (parsedUser.role === 'admin' && location.pathname === '/') {
-        navigate('/admin');
-      }
     }
   }, [navigate, location.pathname]);
 
@@ -55,12 +43,6 @@ export const AuthProvider = ({ children }) => {
       setUser(userWithoutPassword);
       localStorage.setItem('auth_user', JSON.stringify(userWithoutPassword));
       toast.success(`Welcome back, ${userWithoutPassword.name}!`);
-      
-      // Redirect admin users to admin dashboard after login
-      if (userWithoutPassword.role === 'admin') {
-        navigate('/admin');
-      }
-      
       return true;
     } else {
       toast.error('Invalid email or password');
@@ -80,7 +62,6 @@ export const AuthProvider = ({ children }) => {
       value={{ 
         user, 
         isAuthenticated: !!user,
-        isAdmin: user?.role === 'admin',
         login, 
         logout
       }}

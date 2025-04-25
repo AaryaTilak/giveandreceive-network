@@ -10,11 +10,6 @@ import Index from "./pages/Index";
 import Donations from "./pages/Donations";
 import Requests from "./pages/Requests"; 
 import NotFound from "./pages/NotFound";
-import Admin from "./pages/Admin";
-import AdminLayout from "./pages/AdminLayout";
-import AdminDonations from "./pages/AdminDonations";
-import AdminRequests from "./pages/AdminRequests";
-import AdminSettings from "./pages/AdminSettings";
 import DonationForm from "./pages/DonationForm";
 import DonationSuccess from "./pages/DonationSuccess";
 import RequestForm from "./pages/RequestForm";
@@ -47,14 +42,6 @@ const App = () => (
             <Route path="/profile" element={<Profile />} />
             <Route path="/edit-donation" element={<EditDonationForm />} />
             <Route path="/edit-request" element={<EditRequestForm />} />
-            
-            {/* Admin Routes */}
-            <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={<Admin />} />
-              <Route path="donations" element={<AdminDonations />} />
-              <Route path="requests" element={<AdminRequests />} />
-              <Route path="settings" element={<AdminSettings />} />
-            </Route>
             
             <Route path="*" element={<NotFound />} />
           </Routes>
