@@ -15,7 +15,7 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
-  const { isAuthenticated, user, logout, isAdmin } = useAuth();
+  const { isAuthenticated, user, logout } = useAuth();
 
   // Track scroll position to add background to header
   useEffect(() => {
@@ -49,7 +49,7 @@ export default function Header() {
           
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <NavLinks isAuthenticated={isAuthenticated} isAdmin={isAdmin} />
+            <NavLinks isAuthenticated={isAuthenticated} />
             
             {isAuthenticated ? (
               <div className="flex items-center gap-4">
@@ -89,7 +89,7 @@ export default function Header() {
         {isMenuOpen && (
           <nav className="md:hidden pt-6 pb-4 animate-fade-in">
             <div className="flex flex-col space-y-4">
-              <NavLinks isAuthenticated={isAuthenticated} isAdmin={isAdmin} />
+              <NavLinks isAuthenticated={isAuthenticated} />
               
               {isAuthenticated ? (
                 <div className="pt-2 border-t border-gray-200 dark:border-gray-800">
@@ -121,7 +121,7 @@ export default function Header() {
   );
 }
 
-function NavLinks({ isAuthenticated, isAdmin }: { isAuthenticated: boolean, isAdmin: boolean }) {
+function NavLinks({ isAuthenticated }: { isAuthenticated: boolean }) {
   const location = useLocation();
   
   // Basic links for everyone
@@ -134,11 +134,6 @@ function NavLinks({ isAuthenticated, isAdmin }: { isAuthenticated: boolean, isAd
   // Add profile for authenticated users
   if (isAuthenticated) {
     links.push({ to: '/profile', label: 'My Profile', icon: User });
-  }
-  
-  // Add admin link for admins
-  if (isAdmin) {
-    links.push({ to: '/admin', label: 'Admin Panel' });
   }
   
   return (
